@@ -6,8 +6,42 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Meow</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Hewwo! I'm tymi ^w^</h1>
+<main>
+    <div class="cat">
+        <div class="eye left-eye">
+            <div class="pupil"></div>
+        </div>
+        <div class="eye right-eye">
+            <div class="pupil"></div>
+        </div>
+    </div>
+    <div class="content">
+        <section>
+            <h2>Who am I?</h2>
+            <p>
+                Hewwo! I'm tymi, a software engineer. I started programming with C++ in 2016, and been doing that constantly ever since.
+            </p>
+        </section>
+    </div>
+    <script>
+        // script.js
+        document.addEventListener('mousemove', (e) => {
+            const eyes = document.querySelectorAll('.eye');
+            eyes.forEach(eye => {
+                const rect = eye.getBoundingClientRect();
+                const eyeCenterX = rect.left + rect.width / 2;
+                const eyeCenterY = rect.top + rect.height / 2;
+                const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+                const pupil = eye.querySelector('.pupil');
+
+                // Move the pupil based on cursor position
+                pupil.style.transform = `translate(-50%, -50%) translate(${Math.cos(angle) * 5}px, ${Math.sin(angle) * 2}px)`;
+            });
+        });
+    </script>
+</main>
 </body>
 </html>
