@@ -11,5 +11,8 @@
           "type": "git",
           "url": "https://github.com/TymianekPL/tymi.org.git"
      },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
      "private": true
 }
