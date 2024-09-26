@@ -10,7 +10,7 @@
 </head>
 <body>
 <main>
-    <div class="cat">
+    <div class="cat" id="cat">
         <div class="eye left-eye">
             <div class="pupil"></div>
         </div>
@@ -51,6 +51,10 @@
                 pupil.style.transform = `translate(-50%, -50%) translate(${Math.cos(angle) * 5}px, ${Math.sin(angle) * 2}px)`;
             });
         });
+        const cat = document.getElementById("cat");
+        cat.onclick = () => {
+            cat.remove();
+        };
     </script>
 </main>
 </body>
