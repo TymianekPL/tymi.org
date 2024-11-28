@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>meowwwwqwwwwwwwwqwwwww22wq</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Cascadia+Code");
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: 0;
+        }
+
+        body {
+            background: linear-gradient(45deg, #fe6d90, #deadda);
+            color: snow;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        pre {
+            background-color: #1e1e1e;
+            width: max-content;
+            padding: 10px;
+            border-radius: 10px;
+            font-family: "Cascadia Code";
+        }
+
+        #timer {
+            font-size: 15rem;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+        }
+
+        button {
+            border: 0;
+            padding: 10px;
+            border-radius: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            color: snow;
+            font-weight: bold;
+            font-size: 2rem;
+            width: 200px;
+        }
+
+        .button1,
+        .button4 {
+            background-color: #10af30;
+            cursor: pointer;
+        }
+
+        .button2 {
+            background-color: #ff2050;
+            cursor: not-allowed;
+        }
+
+        .button3 {
+            background-color: #bfc020;
+            display: none;
+        }
+
+        .new {
+            background-color: red;
+            border-radius: 50%;
+            display: inline-block;
+            font-size: 0.4em;
+            padding-inline: 10px;
+            padding-block: 5px;
+            vertical-align: middle;
+            font-weight: bolder;
+            margin-bottom: 5px;
+            animation: newAnim 500ms infinite;
+        }
+
+        @keyframes newAnim {
+            0% {
+                font-size: 0.4em;
+            }
+
+            50% {
+                font-size: 0.5em;
+            }
+
+            100% {
+                font-size: 0.4em;
+            }
+        }
+        body.theme-console {
+            background: #000;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        select {
+            border: 0;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        option {
+            background-color: #deadda;
+            color: snow;
+        }
+        option[selected], option:hover, option:checked {
+            background-color: #ff2090;
+            color: snow;
+        }
+        .rules {
+            display: block;
+            position: absolute;
+            top: 30px;
+            font-size: 4rem;
+        }
+
+        .awoo {
+            animation: moveItBaby 1s infinite;
+            position: relative;
+        }
+        @keyframes moveItBaby {
+            0% {
+                top: -55px
+            }
+            50% {
+                top: 55px;
+            }
+            0% {
+                top: -55px;
+            }
+        }
+
+        #score {
+            font-size: 10rem;
+        }
+    </style>
+    <script>
+        const gradient = 0x80;
+        let accent = 0;
+        let inverse = 1;
+        setInterval(() => {
+            if (document.body.classList.contains("theme-uwu")) {
+                accent += 10 * inverse;
+                if (accent >= gradient - 1 || accent <= 1) inverse *= -1;
+                accent = Math.min(gradient, Math.abs(accent));
+
+                document.body.style.background = (`linear-gradient(45deg, #${((0xdead00) | (((gradient - accent) + (0xff - gradient)))).toString(16)}, #${((0xdead00) | (accent + (0xff - gradient))).toString(16)})`);
+            } else document.body.style.background = "";
+        }, 100);
+    </script>
+</head>
+
+<body>
+    <h1 class="rules">Kliknij => +1 punkt; Przegraj => Przegrywasz</h1>
+    <div style="display: flex; width: 100%; justify-content: space-between; padding-inline: 25vw; font-size: 2rem;">
+        <h2>Rekord: <span id="record"></span> <span class="new" style="display: none;">new!</span></h2>
+        <div>
+            <select id="theme-select">
+                <option value="uwu" selected>UwU</option>
+                <option value="console">Console</option>
+            </select>
+        </div>
+    </div>
+    <button id="button4" class="gamebutton button4" style="display: none;">Kliknij</button>
+    <div id="score">0</div>
+    <div id="timer">01,500</div>
+    <div class="buttons" id="buttons">
+        <button id="button1" class="gamebutton button1">Kliknij</button>
+        <button id="button2" class="gamebutton button2">Przegraj</button>
+        <button id="button3" class="gamebutton button3">Przegraj</button>
+    </div>
+    <script>
+        const themeSelect = document.getElementById("theme-select");
+        let currentTheme = localStorage.getItem("theme") ?? "uwu";
+        document.body.classList.add(`theme-${currentTheme}`);
+        themeSelect.onchange = () => {
+            const selectedTheme = themeSelect.value;
+            localStorage.setItem("theme", selectedTheme);
+
+            document.body.classList.remove(`theme-${currentTheme}`);
+            document.body.classList.add(`theme-${selectedTheme}`);
+
+            currentTheme = selectedTheme;
+            document.body.style.background = "";
+        }
+        themeSelect.value = currentTheme;
+        const recordElement = document.getElementById("record");
+        recordElement.textContent = localStorage.getItem("record") ?? 0;
+        const newTag = document.querySelector(".new");
+
+        let timeForMove = 1500;
+        const scoreElement = document.getElementById("score");
+        let score = 0;
+        let interval = null;
+        let milliSecondsLeft = timeForMove;
+        const iteration = () => {
+            if (milliSecondsLeft <= 0) {
+                milliSecondsLeft = timeForMove;
+                const seconds = milliSecondsLeft % 1000;
+                const minutes = Math.floor(milliSecondsLeft / 1000);
+                timer.textContent = `${minutes > 9 ? minutes : ("0" + minutes)},${seconds > 9 ? seconds : ("0" + seconds)}`;
+                lose();
+                return;
+            }
+            milliSecondsLeft -= 37;
+            const seconds = milliSecondsLeft % 1000;
+            const minutes = Math.floor(milliSecondsLeft / 1000);
+            timer.textContent = `${minutes > 9 ? minutes : ("0" + minutes)},${seconds > 9 ? seconds : ("0" + seconds)}`;
+        }
+        const updateScore = () => {
+            scoreElement.textContent = ++score;
+        }
+        const lose = () => {
+            clearInterval(interval);
+            milliSecondsLeft = timeForMove;
+            let record = localStorage.getItem("record") ?? 0;
+            const newRecord = record < score;
+            if (newRecord) record = score;
+            newTag.style.display = newRecord ? "inline-block" : "none";
+            recordElement.textContent = record;
+            localStorage.setItem("record", record);
+            scoreElement.textContent = `Przegrana. Wynik: ${score}`;
+            score = 0;
+        }
+        const buttons = document.querySelectorAll(".gamebutton");
+        const next = () => {
+            clearInterval(interval);
+            interval = setInterval(iteration, 1000 / 37);
+            milliSecondsLeft = timeForMove;
+            updateScore();
+            let switchButtons = true;
+            if (score >= 5) {
+                switchButtons = Math.random() >= 0.7;
+            }
+            let switchClasses = switchButtons;
+            if (score >= 25) {
+                switchClasses = Math.random() > 0.5;
+            }
+            let showYellowButton = false;
+            if (score >= 35) {
+                showYellowButton = Math.random() > 0.6;
+            }
+            let shuffleButtons = false;
+            if (score >= 45) {
+                showYellowButton = Math.random() > 0.3;
+            }
+            const button1 = document.getElementById("button1");
+            const button2 = document.getElementById("button2");
+            const button3 = document.getElementById("button3");
+            const button4 = document.querySelector(".button4");
+            if (button4.style.display != "none") {
+                let i = 0;
+                buttons.forEach(b => {
+                    if (b.classList.contains("button4")) return;
+                    button4.classList.remove(`button1`);
+                    button4.classList.remove(`button2`);
+                    button4.classList.remove(`button3`);
+                    button4.classList.remove(`button4`);
+                    button4.classList.remove(`button5`);
+                    b.id = `button${++i}`;
+                    b.classList.add(`button${i}`);
+                    b.style.display = "block";
+                });
+                button4.id = `button4`;
+                button4.classList.remove(`button1`);
+                button4.classList.remove(`button2`);
+                button4.classList.remove(`button3`);
+                button4.classList.remove(`button4`);
+                button4.classList.remove(`button5`);
+                button4.classList.add(`button4`);
+                button4.style.display = "none";
+                return;
+            }
+            if (switchButtons) {
+                button1.id = "button2";
+                button2.textContent = "Kliknij";
+                button2.id = "button1";
+                button1.textContent = "Przegraj";
+            }
+            if (switchClasses) {
+                button1.classList.remove("button1");
+                button1.classList.add("button2");
+                button2.classList.remove("button2");
+                button2.classList.add("button1");
+            }
+            button3.style.display = showYellowButton ? "block" : "none";
+            if (shuffleButtons) {
+                const buttonsContainer = document.getElementById("buttons");
+                for (let i = buttonsContainer.children.length; i >= 0; i--)
+                    buttonsContainer.appendChild(buttonsContainer.children[Math.random() * i | 0]);
+            }
+            if (score >= 55) {
+                timeForMove = Math.floor(Math.random() % 500) + 750;
+            }
+            if (score >= 65) {
+                let useButton4 = Math.random() > 0.75;
+                let i = 1;
+                buttons.forEach(b => {
+                    if (b.classList.contains("button4")) return;
+                    button4.classList.remove(`button1`);
+                    button4.classList.remove(`button2`);
+                    button4.classList.remove(`button3`);
+                    button4.classList.remove(`button4`);
+                    button4.classList.remove(`button5`);
+                    b.id = `button${++i}`;
+                    b.classList.add(`button${i}`);
+                    b.style.display = "block";
+                });
+                button4.id = `button1`;
+                button4.classList.remove(`button1`);
+                button4.classList.remove(`button2`);
+                button4.classList.remove(`button3`);
+                button4.classList.remove(`button4`);
+                button4.classList.remove(`button5`);
+                button4.classList.add(`button4`);
+                button4.style.display = "block";
+            }
+            if (score >= 75) {
+                buttons.forEach(b => {
+                    if (Math.random() >= 0.5) b.classList.toggle("awoo");
+                })
+            }
+        }
+        const buttonPress = button => {
+            console.log(button.id);
+            if (button.id == "button1") next();
+            else lose();
+        }
+        buttons.forEach(b => b.onclick = () => buttonPress(b));
+    </script>
+</body>
+<script>
+</script>
+
+</html>
