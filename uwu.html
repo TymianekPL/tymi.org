@@ -213,7 +213,8 @@
         recordElement.textContent = localStorage.getItem("record") ?? 0;
         const newTag = document.querySelector(".new");
 
-        let timeForMove = 1500;
+        const defaultMoveTime = 1500;
+        let timeForMove = defaultMoveTime;
         const scoreElement = document.getElementById("score");
         let score = 0;
         let interval = null;
@@ -236,6 +237,7 @@
             scoreElement.textContent = ++score;
         }
         const lose = () => {
+            timeForMove = defaultMoveTime
             buttons.forEach(b => {
                 b.classList.remove("fun");
             })
