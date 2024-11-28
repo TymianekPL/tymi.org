@@ -98,23 +98,30 @@
                 font-size: 0.4em;
             }
         }
+
         body.theme-console {
             background: #000;
             font-family: 'Courier New', Courier, monospace;
         }
+
         select {
             border: 0;
             padding: 10px;
             border-radius: 10px;
         }
+
         option {
             background-color: #deadda;
             color: snow;
         }
-        option[selected], option:hover, option:checked {
+
+        option[selected],
+        option:hover,
+        option:checked {
             background-color: #ff2090;
             color: snow;
         }
+
         .rules {
             display: block;
             position: absolute;
@@ -126,16 +133,26 @@
             animation: moveItBaby 1s infinite;
             position: relative;
         }
+
         @keyframes moveItBaby {
             0% {
                 top: -55px
             }
+
             50% {
                 top: 55px;
             }
+
             0% {
                 top: -55px;
             }
+        }
+
+        .fun.button1:hover {
+            background-color: #ff2050;
+        }
+        .fun.button2:hover {
+            background-color: #10af30;
         }
 
         #score {
@@ -219,6 +236,9 @@
             scoreElement.textContent = ++score;
         }
         const lose = () => {
+            buttons.forEach(b => {
+                b.classList.remove("fun");
+            })
             clearInterval(interval);
             milliSecondsLeft = timeForMove;
             let record = localStorage.getItem("record") ?? 0;
@@ -326,6 +346,11 @@
             if (score >= 75) {
                 buttons.forEach(b => {
                     if (Math.random() >= 0.5) b.classList.toggle("awoo");
+                })
+            }
+            if (score === 85) {
+                buttons.forEach(b => {
+                    b.classList.add("fun");
                 })
             }
         }
