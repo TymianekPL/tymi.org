@@ -28,6 +28,7 @@
 
           .title-page h1 {
                font-size: 2.5em;
+               word-wrap: normal;
           }
 
           .title-page p {
@@ -99,6 +100,11 @@
                font-size: 0.9em;
           }
 
+          pre {
+               word-wrap: break-word;
+               white-space: wrap;
+          }
+
           header {
                position: sticky;
                top: 0;
@@ -115,7 +121,7 @@
      </header>
 
      <section class="title-page">
-          <h1>std::wprint/std::wprintln</h1>
+          <h1>std::wprint / std::wprintln</h1>
           <p>Document Number: PXXXXR0</p>
           <p>Date: <i>01.04.2025</i></p>
           <p>Audience: Library Evolution Working Group (LEWG), SG16, SG18</p>
