@@ -104,13 +104,13 @@
 <body>
      <header>
           <div>Document Number: PXXXXR0</div>
-          <div>Date: <span id="date"></span></div>
+          <div>Date: <i>01.04.2025</i></div>
      </header>
 
      <section class="title-page">
           <h1>std::wprint/std::wprintln</h1>
           <p>Document Number: PXXXXR0</p>
-          <p>Date: <span id="title-date"></span></p>
+          <p>Date: <i>01.04.2025</i></p>
           <p>Audience: Library Evolution Working Group (LEWG), SG16, SG18</p>
           <p>Author(s): Tymi <a href="mailto:tymi.cpp@gmail.com">&lt;tymi.cpp@gmail.com&gt;</a></p>
      </section>
@@ -218,13 +218,6 @@
      <span class="type">std</span>::<span class="func">wprintln</span>(<span class="string">"The System Locale is {}"</span>, <span class="var">locale</span>);
 }
 </pre>
-
-     <script>
-          const today = new Date();
-          const formattedDate = today.getDate().toString().padStart(2, "0") + "." + (today.getMonth() + 1).toString().padStart(2, "0") + "." + today.getFullYear();
-          document.getElementById("date").innerText = formattedDate;
-          document.getElementById("title-date").innerText = formattedDate;
-     </script>
 </body>
 
 </html>
