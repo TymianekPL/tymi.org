@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>std::wprint/std::wprintln</title>
+     <style>
+          body {
+               font-family: Arial, sans-serif;
+               line-height: 1.6;
+               color: snow;
+               background-color: #10101f;
+          }
+
+          header {
+               display: flex;
+               justify-content: space-between;
+               font-size: 0.9em;
+               border-bottom: 1px solid #000;
+               padding-bottom: 5px;
+          }
+
+          .title-page {
+               text-align: center;
+               margin-top: 100px;
+          }
+
+          .title-page h1 {
+               font-size: 2.5em;
+          }
+
+          .title-page p {
+               font-size: 1.2em;
+          }
+
+          .abstract {
+               font-weight: bold;
+               text-align: center;
+               margin-top: 50px;
+          }
+
+          blockquote {
+               margin: 20px;
+               font-style: italic;
+          }
+
+          h2 {
+               font-size: 1.5em;
+               font-weight: bold;
+               margin-top: 30px;
+          }
+
+          ul {
+               margin-left: 20px;
+          }
+
+          a {
+               color: #deadda;
+               text-decoration: none;
+          }
+
+          a:hover {
+               text-decoration: underline;
+          }
+
+          .keyword {
+               color: #deadda;
+          }
+
+          .var {
+               color: #a0d3ff;
+          }
+
+          .type {
+               color: #10cfa0;
+          }
+
+          .func {
+               color: #e4e48e;
+          }
+
+          .macro {
+               color: grey;
+          }
+
+          .string {
+               color: #ea785f;
+          }
+
+
+          .number {
+               color: yellowgreen;
+          }
+
+          footer {
+               text-align: center;
+               margin-top: 50px;
+               font-size: 0.9em;
+          }
+     </style>
+</head>
+
+<body>
+     <header>
+          <div>Document Number: PXXXXR0</div>
+          <div>Date: <span id="date"></span></div>
+     </header>
+
+     <section class="title-page">
+          <h1>std::wprint/std::wprintln</h1>
+          <p>Document Number: PXXXXR0</p>
+          <p>Date: <span id="title-date"></span></p>
+          <p>Audience: Library Evolution Working Group (LEWG), SG16, SG18</p>
+          <p>Author(s): Tymi <a href="mailto:tymi.cpp@gmail.com">&lt;tymi.cpp@gmail.com&gt;</a></p>
+     </section>
+
+     <section class="abstract">
+          <p>Abstract</p>
+          <blockquote>
+               C++ introduced <code>std::print</code>/<code>std::println</code> in C++23. While most functions support
+               wide strings, this particular one lacks the support. This proposal aims to improve that by adding a
+               collection of wide string compliant functions for it. <code>std::wprint</code> and
+               <code>std::wprintln</code> namely.
+          </blockquote>
+     </section>
+
+     <h2>Introduction</h2>
+     <p>This proposal aims to improve the interface of the printing utilities by extending them with wide string
+          versions.</p>
+     <p>That will allow for a better integration with systems using wide characters and programs preferring them.</p>
+
+     <h2>Revision History</h2>
+     <ul>
+          <li>R0: Initial proposal.</li>
+     </ul>
+
+     <h2>Motivation and Scope</h2>
+     <p>
+          C++23 has introduced <code>std::print</code> and <code>std::println</code> function templates, which allow for
+          easy and efficient text output to the console. They provide an interface for regular string formats. However,
+          they do not provide an interface for wide strings, which are commonly used in Windows systems, as well as in
+          specialised systems that work with non-standard encoding. I aim to improve that, by adding an interface to
+          make it accessible.
+     </p>
+
+     <h2>Impact on the Standard</h2>
+     <h3>New Functionality</h3>
+     <p>
+          Implementing this proposal means adding new function templates to the standard library.
+     </p>
+
+     <h2>Technical Specification</h2>
+     <pre>
+<span class="keyword">namespace</span> <span class="type">std</span>
+{
+     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
+     <span class="keyword">void</span> <span class="func">wprint</span>(<span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);</pre>
+
+     <pre>
+     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
+     <span class="keyword">void</span> <span class="func">wprint</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
+</pre>
+
+     <pre>
+     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
+     <span class="keyword">void</span> <span class="func">wprintln</span>(<span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
+</pre>
+     <pre>
+     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
+     <span class="keyword">void</span> <span class="func">wprintln</span>();
+</pre>
+     <pre>
+     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
+     <span class="keyword">void</span> <span class="func">wprintln</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
+</pre>
+     <pre>
+     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
+     <span class="keyword">void</span> <span class="func">wprintln</span>(<span class="type">FILE</span>* <span class="var">stream</span>);
+}
+</pre>
+     <p>
+          These
+     </p>
+
+     <h2>Implementation Experience</h2>
+     <p>ECPPS has experimental support for <code>std::wprint</code>/<code>std::wprintln</code> via a language extension.
+     </p>
+
+     <h2>Design Decisions</h2>
+     <p>
+          In an ideal world, the <code>std::print</code>/<code>std::println</code> functions would support overloads for
+          <code>std::wformat_string</code>. Sadly they do not. An alternative approach to
+          <code>std::wprint</code>/<code>std::wprintln</code> would be to add such overloads. However, I find it
+          inconsistent with other library features such as <code>std::(w)cout</code>, <code>std::(w)string</code>,
+          <code>std::(w)format_string</code> itself etc. Except for few rare cases (such as <code>std::format</code>
+          function template), <code>std::wmeow</code> is the standard preferred version.
+     </p>
+     <p>
+          There could also exist <code>std::u8print</code>, <code>std::u16print</code>, <code>std::u32print</code>
+          functions, but this revision does not include them. Maybe in further revisions or another proposal.
+     </p>
+
+     <h2>References</h2>
+
+     <h2>Appendix A. Examples</h2>
+     <p>
+          Here are a couple of examples where <code>std::wprint</code>/<code>std::wprintln</code> could be benefitial.
+     </p>
+     <h3>WinAPI</h3>
+     <pre>
+<span class="keyword">int</span> main(<span class="keyword">void</span>)
+{
+     <span class="type">std</span>::<span class="type">wstring</span> <span class="var">locale</span>{};
+     <span class="var">locale</span>.<span class="func">resize</span>(<span class="macro">LOCALE_NAME_MAX_LENGTH</span>);
+     <span class="var">locale</span>.<span class="func">resize</span>(<span class="func">GetUserDefaultLocaleName</span>(<span class="var">locale</span>.<span class="func">data</span>(), <span class="var">locale</span>.<span class="func">size</span>()) - <span class="number">1</span>);     
+
+     <span class="type">std</span>::<span class="func">wprintln</span>(<span class="string">"The System Locale is {}"</span>, <span class="var">locale</span>);
+}
+</pre>
+
+     <script>
+          const today = new Date();
+          const formattedDate = today.getDate().toString().padStart(2, "0") + "." + (today.getMonth() + 1).toString().padStart(2, "0") + "." + today.getFullYear();
+          document.getElementById("date").innerText = formattedDate;
+          document.getElementById("title-date").innerText = formattedDate;
+     </script>
+</body>
+
+</html>
