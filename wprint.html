@@ -102,7 +102,7 @@
 
           pre {
                word-wrap: break-word;
-               white-space: wrap;
+               overflow-x: auto;
           }
 
           header {
@@ -228,7 +228,7 @@
      <span class="var">locale</span>.<span class="func">resize</span>(<span class="macro">LOCALE_NAME_MAX_LENGTH</span>);
      <span class="var">locale</span>.<span class="func">resize</span>(<span class="func">GetUserDefaultLocaleName</span>(<span class="var">locale</span>.<span class="func">data</span>(), <span class="var">locale</span>.<span class="func">size</span>()) - <span class="number">1</span>);     
 
-     <span class="type">std</span>::<span class="func">wprintln</span>(<span class="string">"The System Locale is {}"</span>, <span class="var">locale</span>);
+     <span class="type">std</span>::<span class="func">wprintln</span>(<span class="string">L"The System Locale is {}"</span>, <span class="var">locale</span>);
 }
 </pre>
 </body>
