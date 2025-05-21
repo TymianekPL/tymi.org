@@ -138,8 +138,7 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
           <blockquote>
                C++ introduced <code>std::print</code>/<code>std::println</code> in C++23. While most functions support
                wide strings, this particular one lacks the support. This proposal aims to improve that by adding a
-               collection of wide string compliant functions for it. <code>std::wprint</code> and
-               <code>std::wprintln</code> namely.
+               collection of wide string overloads functions for it, accepting <code>std::wformat_string</code>.
           </blockquote>
      </section>
 
@@ -165,7 +164,7 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      <h2>Impact on the Standard</h2>
      <h3>New Functionality</h3>
      <p>
-          Implementing this proposal means adding new function templates to the standard library.
+          Implementing this proposal means adding new overloads for a function template to the standard library.
      </p>
 
      <h2>Technical Specification</h2>
@@ -173,28 +172,28 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
 <span class="keyword">namespace</span> <span class="type">std</span>
 {
      <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">wprint</span>(<span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);</pre>
+     <span class="keyword">void</span> <span class="func">print</span>(<span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);</pre>
 
      <pre>
      <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">wprint</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
+     <span class="keyword">void</span> <span class="func">print</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
 </pre>
 
      <pre>
      <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">wprintln</span>(<span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
+     <span class="keyword">void</span> <span class="func">println</span>(<span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
 </pre>
      <pre>
      <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">wprintln</span>();
+     <span class="keyword">void</span> <span class="func">println</span>();
 </pre>
      <pre>
      <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">wprintln</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
+     <span class="keyword">void</span> <span class="func">println</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
 </pre>
      <pre>
      <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">wprintln</span>(<span class="type">FILE</span>* <span class="var">stream</span>);
+     <span class="keyword">void</span> <span class="func">println</span>(<span class="type">FILE</span>* <span class="var">stream</span>);
 }
 </pre>
      <p>
@@ -202,28 +201,22 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      </p>
 
      <h2>Implementation Experience</h2>
-     <p>ECPPS has experimental support for <code>std::wprint</code>/<code>std::wprintln</code> via a language extension.
+     <p>No implementation experience yet, although there is a work in progress project to add those overloads into MSVC, clang and ECPPS.
      </p>
 
      <h2>Design Decisions</h2>
      <p>
-          In an ideal world, the <code>std::print</code>/<code>std::println</code> functions would support overloads for
-          <code>std::wformat_string</code>. Sadly they do not. An alternative approach to
-          <code>std::wprint</code>/<code>std::wprintln</code> would be to add such overloads. However, I find it
-          inconsistent with other library features such as <code>std::(w)cout</code>, <code>std::(w)string</code>,
-          <code>std::(w)format_string</code> itself etc. Except for few rare cases (such as <code>std::format</code>
-          function template), <code>std::wmeow</code> is the standard preferred version.
+          Some might say adding a separate function for wide string support such as wprint/wprintln would align more with other functions such as printf, cout, etc. Although in my opinion these names are remaments of C, and <code>std::print</code> is closer to <code>std::format</code> which uses the overload convention.
      </p>
      <p>
-          There could also exist <code>std::u8print</code>, <code>std::u16print</code>, <code>std::u32print</code>
-          functions, but this revision does not include them. Maybe in further revisions or another proposal.
+          There could also exist overloads for other strings (<code>std::basic_format_string &gt;charN_t&lt;</code>), but this proposal does not cover those. Maybe in a future revision or a separate paper.
      </p>
 
      <h2>References</h2>
 
      <h2>Appendix A. Examples</h2>
      <p>
-          Here are a couple of examples where <code>std::wprint</code>/<code>std::wprintln</code> could be benefitial.
+          Here are a couple of examples where <code>std::print</code>/<code>std::println</code> wide string overloads could be benefitial.
      </p>
      <h3>WinAPI</h3>
      <pre>
@@ -233,13 +226,20 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      <span class="var">locale</span>.<span class="func">resize</span>(<span class="macro">LOCALE_NAME_MAX_LENGTH</span>);
      <span class="var">locale</span>.<span class="func">resize</span>(<span class="func">GetUserDefaultLocaleName</span>(<span class="var">locale</span>.<span class="func">data</span>(), <span class="var">locale</span>.<span class="func">size</span>()) - <span class="number">1</span>);     
 
-     <span class="type">std</span>::<span class="func">wprintln</span>(<span class="string">L"The System Locale is {}"</span>, <span class="var">locale</span>);
+     <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"The System Locale is {}"</span>, <span class="var">locale</span>);
 }
 </pre>
      <p>
           Expected output:
           <pre>The System Locale is en-GB</pre>
      </p>
+     <h3>Unicode characters in paths</h3>
+     <pre>
+<span class="keyword">void</span> PrintPath(<span class="type">std</span>::<span class="type">filesystem</span>::<span class="type">path</span> <span class="var">path</span> <span class="var">path</span>)
+{
+     <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"Path = {}"</span>, <span class="var">path</span>);
+}
+     </pre>
 </body>
 
 </html>
