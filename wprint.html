@@ -136,16 +136,13 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      <section class="abstract">
           <p>Abstract</p>
           <blockquote>
-               C++ introduced <code>std::print</code>/<code>std::println</code> in C++23. While most functions support
-               wide strings, this particular one lacks the support. This proposal aims to improve that by adding a
-               collection of wide string overloads functions for it, accepting <code>std::wformat_string</code>.
+               C++23 introduced <code>std::print</code> and <code>std::println</code>. While most standard library facilities support wide strings, these functions currently do not. This paper proposes the addition of wide-string overloads of these functions, accepting <code>std::wformat_string</code>, to provide consistent support for wide-character formatted output.
           </blockquote>
      </section>
 
      <h2>Introduction</h2>
-     <p>This proposal aims to improve the interface of the printing utilities by extending them with wide string
-          versions.</p>
-     <p>That will allow for a better integration with systems using wide characters and programs preferring them.</p>
+     <p>This proposal extends the interface of the standard printing utilities by introducing wide-string versions of <code>std::print</code> and <code>std::println</code>.</p>
+     <p>The addition allows seamless integration with systems that use wide-characters and supports codebases where wide-character-strings are the preferred representation.</p>
 
      <h2>Revision History</h2>
      <ul>
@@ -154,17 +151,24 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
 
      <h2>Motivation and Scope</h2>
      <p>
-          C++23 has introduced <code>std::print</code> and <code>std::println</code> function templates, which allow for
-          easy and efficient text output to the console. They provide an interface for regular string formats. However,
-          they do not provide an interface for wide strings, which are commonly used in Windows systems, as well as in
-          specialised systems that work with non-standard encoding. I aim to improve that, by adding an interface to
-          make it accessible.
+          C++23 introduced <code>std::print</code> and <code>std::println</code> function templates, which provide efficient formatted text output. These functions are currently limited to narrow string formats.
+     </p>
+     <p>
+          Wide-strings are widely used throughout many codebases, particularly on Windows and in specialised environments that employ non-UTF-8 encodings. The lack of direct wide-string support in the formatted printing utilities provides confusion and leads to inconsistencies across APIs.
+     </p>
+     <p>
+          This proposal aims to narrow the gap by providing overloads for the <code>std::print</code> and <code>std::println</code> that accept <code>std::wformat_args</code>, ensuring that developers can use the formatted output facilities with wide-strings.
      </p>
 
      <h2>Impact on the Standard</h2>
      <h3>New Functionality</h3>
      <p>
-          Implementing this proposal means adding new overloads for a function template to the standard library.
+          This proposal introduces additional function template overloads, no existing functionality is removed or changed, the impact is additive only.
+     </p>
+     <h2>Wording</h2>
+     <p>
+          Change the <code>__cpp_lib_print</code> entry's value in section "Header <version> synopsis <code>[version.syn]</code>" to represent the current standard revision:
+          <pre>#define __cpp_lib_print <i>placeholder</i>  // also in &lt;print&gt; and &lt;ostream&gt; </pre>
      </p>
 
      <h2>Technical Specification</h2>
@@ -191,27 +195,42 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
 }
 </pre>
      <p>
-          These are the possible signatures for the functions covered by this proposal.
+          These overloads provide wide-string support for <code>std::print</code> and <code>std::println</code> functions.
      </p>
 
      <h2>Implementation Experience</h2>
-     <p>No implementation experience yet, although there is a work in progress project to add those overloads into MSVC, clang and ECPPS.
+     <p>
+          No production implementations are yet available.
+     </p>
+     <p>
+          Work is in progress to add thse overloads to MSVC, ECPPS and Clang.
      </p>
 
      <h2>Design Decisions</h2>
      <p>
-          Some might say adding a separate function for wide string support such as wprint/wprintln would align more with other functions such as printf, cout, etc. Although in my opinion these names are remaments of C, and <code>std::print</code> is closer to <code>std::format</code> which uses the overload convention.
+          An alternative design to additional overloads would introduce distinct functions named <code>wprint</code> and <code>wprintln</code>, aligning with the C naming style (printf / wprintf) and the cout/wcout precedent.
      </p>
      <p>
           There could also exist overloads for other strings (<code>std::basic_format_string &gt;charN_t&lt;</code>), but this proposal does not cover those. Maybe in a future revision or a separate paper.
      </p>
+     <p>
+          This paper rejects that approach for the following reasons:
+          <ol>
+             <li><code>std::print</code> and <code>std::format</code> are designed to be consistent; overloads better match this design than distinct function names.</li>  
+             <li>Introducing new overload sets would further unnecessarily increase the complexity and ambiguity.</li>  
+          </ol>
+     </p>
+     <p>
+          Support for additional character types (<code>char8_t</code>, <code>char16_t</code>, <code>char32_t</code>) is conceivable but outside the scope of this paper.
+     </p>
 
      <h2>References</h2>
+     <ul>
+          <a href="https://open-std.org/jtc1/sc22/wg21/docs/papers/2025/n5008.pdf" target="_blank">N5008</a>: Programming Languages - C++
+          <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2093r14.html" target="_blank">P2093</a>: Formatted output
+     </ul>
 
      <h2>Appendix A. Examples</h2>
-     <p>
-          Here are a couple of examples where <code>std::print</code>/<code>std::println</code> wide string overloads could be benefitial.
-     </p>
      <h3>WinAPI</h3>
      <pre>
 <span class="keyword">int</span> main(<span class="keyword">void</span>)
