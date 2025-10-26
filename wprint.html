@@ -151,12 +151,12 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      <p>This proposal extends the interface of the standard printing utilities by introducing wide-string versions of <code>std::print</code> and <code>std::println</code>.</p>
      <p>The addition allows seamless integration with systems that use wide-characters and supports codebases where wide-character-strings are the preferred representation.</p>
 
-     <h2>Revision History</h2>
+     <h2 id="revision-history"><a href="#history">Revision History</a></h2>
      <ul>
           <li>R0: Initial proposal.</li>
      </ul>
 
-     <h2>Motivation and Scope</h2>
+     <h2 id="motivation"><a href="#motivation">Motivation and Scope</a></h2>
      <p>
           C++23 introduced <code>std::print</code> and <code>std::println</code> function templates, which provide efficient formatted text output. These functions are currently limited to narrow string formats.
      </p>
@@ -167,12 +167,12 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
           This proposal aims to narrow the gap by providing overloads for the <code>std::print</code> and <code>std::println</code> that accept <code>std::wformat_args</code>, ensuring that developers can use the formatted output facilities with wide-strings.
      </p>
 
-     <h2>Impact on the Standard</h2>
+     <h2 id="impact"><a href="#impact">Impact on the Standard</a></h2>
      <h3>New Functionality</h3>
      <p>
           This proposal introduces additional function template overloads, no existing functionality is removed or changed, the impact is additive only.
      </p>
-     <h2>Wording</h2>
+     <h2 id="wording"><a href="#wording">Wording</a></h2>
      <p>
           Change the <code>__cpp_lib_print</code> entry's value in section "Header <version> synopsis <code>[version.syn]</code>" to represent the current standard revision:
           <pre>#define __cpp_lib_print <i>placeholder</i>  // also in &lt;print&gt; and &lt;ostream&gt; </pre>
@@ -233,7 +233,7 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
           </div>
      </p>
 
-     <h2>Technical Specification</h2>
+     <h2 id="spec"><a href="#spec">Technical Specification</a></h2>
      <pre>
 <span class="keyword">namespace</span> <span class="type">std</span>
 {
@@ -264,7 +264,7 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
           These overloads provide wide-string support for <code>std::print</code> and <code>std::println</code> functions.
      </p>
 
-     <h2>Implementation Experience</h2>
+     <h2 id="experience"><a href="#experience">Implementation Experience</a></h2>
      <p>
           No production implementations are yet available.
      </p>
@@ -272,7 +272,7 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
           Work is in progress to add these overloads to MSVC, ECPPS and Clang.
      </p>
 
-     <h2>Design Decisions</h2>
+     <h2 id="decisions"><a href="#decisions">Design Decisions</a></h2>
      <p>
           An alternative design to additional overloads would introduce distinct functions named <code>wprint</code> and <code>wprintln</code>, aligning with the C naming style (printf / wprintf) and the cout/wcout precedent.
      </p>
@@ -290,13 +290,13 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
           Support for additional character types (<code>char8_t</code>, <code>char16_t</code>, <code>char32_t</code>) is conceivable but outside the scope of this paper.
      </p>
 
-     <h2>References</h2>
+     <h2 id="references"><a href="#references">References</a></h2>
      <ul>
           <li><a href="https://open-std.org/jtc1/sc22/wg21/docs/papers/2025/n5008.pdf" target="_blank">N5008</a>: Programming Languages - C++</li>
           <li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2093r14.html" target="_blank">P2093</a>: Formatted output</li>
      </ul>
 
-     <h2>Appendix A. Examples</h2>
+     <h2 id="examples"><a href="#examples">Appendix A. Examples</a></h2>
      <h3>WinAPI</h3>
      <pre>
 <span class="keyword">int</span> main(<span class="keyword">void</span>)
