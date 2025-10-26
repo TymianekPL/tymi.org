@@ -182,8 +182,8 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
 
           <div class="wording">
           <p>
-              <code>void vprint_unicode(ostream&amp; os, wstring_view fmt, wformat_args args);</code><br>
-              <code>void vprint_nonunicode(ostream&amp; os, wstring_view fmt, wformat_args args);</code>
+              <code>void vprint_unicode(wostream&amp; os, wstring_view fmt, wformat_args args);</code><br>
+              <code>void vprint_nonunicode(wostream&amp; os, wstring_view fmt, wformat_args args);</code>
           </p>
           
           <p><strong>Effects:</strong> Behaves as a formatted output function of <code>os</code>, except that:</p>
@@ -255,8 +255,8 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      <span class="keyword">void</span> <span class="func">println</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
 </pre>
      <pre>
-     <span class="keyword">void</span> <span class="func">vprint_unicode</span>(<span class="type">ostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
-     <span class="keyword">void</span> <span class="func">vprint_nonunicode</span>(<span class="type">ostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
+     <span class="keyword">void</span> <span class="func">vprint_unicode</span>(<span class="type">wostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
+     <span class="keyword">void</span> <span class="func">vprint_nonunicode</span>(<span class="type">wostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
 </pre>
      <pre>
 }
