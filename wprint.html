@@ -122,13 +122,13 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
 <body>
      <header>
           <div>Document Number: D3673R0</div>
-          <div>Date: <i>16.04.2025</i></div>
+          <div>Date: <i>26.10.2025</i></div>
      </header>
 
      <section class="title-page">
           <h1>std::wprint / std::wprintln</h1>
           <p>Document Number: D3673R0</p>
-          <p>Date: <i>20.09.2025</i></p>
+          <p>Date: <i>26.10.2025</i></p>
           <p>Audience: Library Evolution Working Group Incubator (LEWGI, SG18), SG16</p>
           <p>Author(s): Tymi <a href="mailto:tymi.cpp@gmail.com">&lt;tymi.cpp@gmail.com&gt;</a></p>
      </section>
@@ -192,6 +192,10 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      <span class="keyword">void</span> <span class="func">println</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
 </pre>
      <pre>
+     <span class="keyword">void</span> <span class="func">vprint_unicode</span>(<span class="type">ostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
+     <span class="keyword">void</span> <span class="func">vprint_nonunicode</span>(<span class="type">ostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
+</pre>
+     <pre>
 }
 </pre>
      <p>
@@ -251,6 +255,27 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
 <span class="keyword">void</span> PrintPath(<span class="type">std</span>::<span class="type">filesystem</span>::<span class="type">path</span> <span class="var">path</span>)
 {
      <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"Path = {}"</span>, <span class="var">path</span>);
+}
+     </pre>
+     <h3>Displaying emojis</h3>
+     <pre>
+<span class="keyword">void</span> <span class="func">PrintPath</span>(<span class="type">std</span>::<span class="type">filesystem</span>::<span class="type">path</span> <span class="var">path</span>)
+{
+    <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"Path = {}"</span>, <span class="var">path</span>.<span class="func">wstring</span>());
+}
+
+<span class="keyword">int</span> <span class="func">main</span>(<span class="keyword">void</span>)
+{
+    <span class="keyword">using</span> <span class="type">std</span>::<span class="func">operator""s</span>;
+    <span class="func">SetConsoleOutputCP</span>(<span class="macro">CP_UTF8</span>);
+    <span class="type">std</span>::<span class="type">wstring</span> <span class="var">locale</span>{};
+    <span class="var">locale</span>.<span class="func">resize</span>(<span class="macro">LOCALE_NAME_MAX_LENGTH</span>);
+    <span class="var">locale</span>.<span class="func">resize</span>(<span class="func">GetUserDefaultLocaleName</span>(<span class="var">locale</span>.<span class="func">data</span>(), <span class="type">static_cast</span>&lt;<span class="type">DWORD</span>&gt;(<span class="var">locale</span>.<span class="func">size</span>())) - <span class="number">1</span>);
+
+    <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"The System Locale is {}"</span>, <span class="var">locale</span>);
+    <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"Pair: 🍋\x200D🟩"</span>);
+    <span class="keyword">static_assert</span>(<span class="func">sizeof</span>(<span class="string">L"🍋\x200D🟩"</span>) == <span class="number">12</span>);
+    <span class="func">PrintPath</span>(<span class="type">std</span>::<span class="func">filesystem</span>::<span class="func">current_path</span>());
 }
      </pre>
 </body>
