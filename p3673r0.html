@@ -200,8 +200,8 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
           <p><em>Recommended practice:</em> For <code>vprint_unicode</code>, if invoking the native Unicode API requires transcoding, implementations should substitute invalid code units with <code>u+fffd</code> replacement character per the <em>Unicode Standard, Chapter 3.9</em> <code>u+fffd</code> Substitution in Conversion.</p>
 
           <p>
-              <code>void vprint_unicode(FILE*&amp; stream, wstring_view fmt, wformat_args args);</code><br>
-              <code>void vprint_nonunicode(FILE*&amp; stream, wstring_view fmt, wformat_args args);</code>
+              <code>void vprint_unicode(FILE* stream, wstring_view fmt, wformat_args args);</code><br>
+              <code>void vprint_nonunicode(FILE* stream, wstring_view fmt, wformat_args args);</code>
           </p>
                <p><strong>Preconditions:</strong> <code>stream</code> is a valid pointer to an output C wide stream.</p>
 
@@ -278,6 +278,10 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      <pre>
      <span class="keyword">void</span> <span class="func">vprint_unicode</span>(<span class="type">wostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
      <span class="keyword">void</span> <span class="func">vprint_nonunicode</span>(<span class="type">wostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
+</pre>
+     <pre>
+     <span class="keyword">void</span> <span class="func">vprint_unicode</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
+     <span class="keyword">void</span> <span class="func">vprint_nonunicode</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
 </pre>
      <pre>
 }
