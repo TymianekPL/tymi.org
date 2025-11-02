@@ -198,7 +198,28 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
           <p>If the function is <code>vprint_unicode</code> and <code>os</code> is a <em>stream</em> that refers to a terminal capable of displaying Unicode (determined in an <em>implementation-defined</em> manner), it writes <code>out</code> to the terminal using the native Unicode API; if <code>out</code> contains invalid code units, the behaviour is undefined and implementations are encouraged to diagnose it. If the native Unicode API is used, the function flushes <code>os</code> before writing <code>out</code>. Otherwise (if <code>os</code> is not such a stream or the function is <code>vprint_nonunicode</code>), inserts the character sequence <code>[out.begin(), out.end())</code> into <code>os</code>. If writing to the terminal or inserting into <code>os</code> fails, calls <code>os.setstate(ios_base::badbit)</code> (which may throw <code>ios_base::failure</code>).</p>
           
           <p><em>Recommended practice:</em> For <code>vprint_unicode</code>, if invoking the native Unicode API requires transcoding, implementations should substitute invalid code units with <code>u+fffd</code> replacement character per the <em>Unicode Standard, Chapter 3.9</em> <code>u+fffd</code> Substitution in Conversion.</p>
+
+          <p>
+              <code>void vprint_unicode(FILE*&amp; stream, wstring_view fmt, wformat_args args);</code><br>
+              <code>void vprint_nonunicode(FILE*&amp; stream, wstring_view fmt, wformat_args args);</code>
+          </p>
+               <p><strong>Preconditions:</strong> <code>stream</code> is a valid pointer to an output C wide stream.</p>
+
+          <p><strong>Effects:</strong> The function initialises an automatic variable via:</p>
+          <pre><code>wstring out = vformat(fmt, args);</code></pre>
           
+          <p>If <code>stream</code> refers to a terminal capable of displaying Unicode, writes <code>out</code> to the terminal using the native Unicode API; if <code>out</code> contains invalid code units, the behaviour is undefined and implementations are encouraged to diagnose it. Otherwise writes <code>out</code> to <code>stream</code> unchanged. If the native Unicode API is used, the function flushes <code>stream</code> before writing <code>out</code>.</p>
+          
+          <ul>
+              <li><strong>Note 1:</strong> On POSIX and Windows, <code>stream</code> referring to a terminal means that <code>isatty(fileno(stream))</code> and <code>GetConsoleMode(_get_osfhandle(_fileno(stream)), ...)</code> return nonzero.</li>
+              <li><strong>Note 2:</strong> On Windows, the native Unicode API is <code>WriteConsoleW</code>.</li>
+          </ul>
+          
+          <p><strong>Throws:</strong> Any exception thrown by the call to <code>vformat</code>. <code>system_error</code> if writing to the terminal or <code>stream</code> fails. May throw <code>bad_alloc</code>.</p>
+          
+          <p><em>Recommended practice:</em> If invoking the native Unicode API requires transcoding, implementations should substitute invalid code units with <code>u+fffd</code> replacement character per the Unicode Standard, Chapter 3.9 <code>u+fffd</code> Substitution in Conversion.</p>
+               
+               
           <h3>Templates</h3>
           
           <pre><code>template&lt;class... Args&gt;
@@ -329,7 +350,6 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
 
 <span class="keyword">int</span> <span class="func">main</span>(<span class="keyword">void</span>)
 {
-    <span class="keyword">using</span> <span class="type">std</span>::<span class="func">operator""s</span>;
     <span class="func">SetConsoleOutputCP</span>(<span class="macro">CP_UTF8</span>);
     <span class="type">std</span>::<span class="type">wstring</span> <span class="var">locale</span>{};
     <span class="var">locale</span>.<span class="func">resize</span>(<span class="macro">LOCALE_NAME_MAX_LENGTH</span>);
