@@ -4,65 +4,123 @@
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>D3673 std::wprint/std::wprintln</title>
+
+     <title>D3673: wide character overloads for std::print/std::println</title>
+
      <meta name="description" content="P3673 std::wprint/std::wprintln proposal">
-     <meta name="keywords" content="std::wprint,  
-std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
+     <meta name="keywords"
+          content="std::wprint, std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
      <meta name="author" content="tymi">
+
      <meta property="og:title" content="std::wprint/std::wprintln">
+
      <style>
+          :root {
+               --bg: #0f111a;
+               --surface: #171923;
+               --surface-2: #1f2330;
+
+               --text: #e6e6e6;
+               --muted: #b8b8c8;
+
+               --accent: #deadda;
+
+               --border: #2a2f3a;
+          }
+
+          * {
+               box-sizing: border-box;
+          }
+
+          html {
+               scroll-behavior: smooth;
+          }
+
           body {
-               font-family: Arial, sans-serif;
-               line-height: 1.6;
-               color: snow;
-               background-color: #10101f;
+               margin: 0;
+               font-family: Inter, "Segoe UI", Arial, sans-serif;
+               line-height: 1.75;
+               background: var(--bg);
+               color: var(--text);
+          }
+
+          main {
+               max-width: 1000px;
+               margin: 0 auto;
+               padding: 2rem;
           }
 
           header {
+               position: sticky;
+               top: 0;
+               z-index: 100;
+
                display: flex;
                justify-content: space-between;
-               font-size: 0.9em;
-               border-bottom: 1px solid #000;
-               padding-bottom: 5px;
+               align-items: center;
+
+               padding: 0.75rem 2rem;
+
+               background: rgba(15, 17, 26, 0.9);
+               backdrop-filter: blur(10px);
+
+               border-bottom: 1px solid var(--border);
+          }
+
+          section {
+               margin-bottom: 3rem;
           }
 
           .title-page {
                text-align: center;
-               margin-top: 100px;
+               margin-top: 4rem;
           }
 
           .title-page h1 {
-               font-size: 2.5em;
-               word-wrap: normal;
-          }
-
-          .title-page p {
-               font-size: 1.2em;
-          }
-
-          .abstract {
-               font-weight: bold;
-               text-align: center;
-               margin-top: 50px;
-          }
-
-          blockquote {
-               margin: 20px;
-               font-style: italic;
+               font-size: clamp(2.5rem, 5vw, 4rem);
+               margin-bottom: 1rem;
           }
 
           h2 {
-               font-size: 1.5em;
-               font-weight: bold;
-               margin-top: 30px;
+               margin-top: 3rem;
+               margin-bottom: 1rem;
+               padding-bottom: 0.5rem;
+               border-bottom: 1px solid var(--border);
           }
 
-          ul {
-               margin-left: 20px;
+          h3 {
+               margin-top: 2rem;
+          }
+
+          p {
+               margin: 1rem 0;
+          }
+
+          blockquote {
+               margin: 2rem 0;
+               padding: 1rem 1.25rem;
+               border-left: 4px solid var(--accent);
+               background: var(--surface);
+               color: var(--muted);
+               font-style: italic;
+          }
+
+          pre {
+               overflow-x: auto;
+               padding: 1rem;
+               background: var(--surface);
+               border-radius: 8px;
+               border: 1px solid var(--border);
+               line-height: 1.5;
+          }
+
+          pre,
+          code {
+               font-family: "Cascadia Code", "JetBrains Mono", monospace;
           }
 
           a {
-               color: #deadda;
+               color: var(--accent);
                text-decoration: none;
           }
 
@@ -70,304 +128,258 @@ std::wprintln, C++, wide character, formatted output, tymi, P3673, D3673">
                text-decoration: underline;
           }
 
-          .keyword {
-               color: #deadda;
-          }
-
-          .var {
-               color: #a0d3ff;
-          }
-
-          .type {
-               color: #10cfa0;
-          }
-
-          .func {
-               color: #e4e48e;
-          }
-
-          .macro {
-               color: grey;
-          }
-
-          .string {
-               color: #ea785f;
-          }
-
-
-          .number {
-               color: yellowgreen;
+          ul,
+          ol {
+               padding-left: 1.5rem;
           }
 
           footer {
+               margin-top: 4rem;
                text-align: center;
-               margin-top: 50px;
-               font-size: 0.9em;
-          }
-
-          pre {
-               word-wrap: break-word;
-               overflow-x: auto;
-          }
-
-          header {
-               position: sticky;
-               top: 0;
-               background-color: inherit;
-               padding-block: 2.5px;
+               color: var(--muted);
           }
 
           .wording {
-               background-color: #292929;
-               padding: 10px;
-               font-family: monospace;
-               border-radius: 8px;
+               background: var(--surface-2);
+               padding: 1.5rem;
+               border-radius: 12px;
+               border: 1px solid var(--border);
           }
      </style>
 </head>
 
 <body>
+
      <header>
           <div>Document Number: D3673R0</div>
-          <div>Date: <i>26.10.2025</i></div>
+          <div>Date: <i>23.05.2026</i></div>
      </header>
 
-     <section class="title-page">
-          <h1>std::wprint / std::wprintln</h1>
-          <p>Document Number: D3673R0</p>
-          <p>Date: <i>26.10.2025</i></p>
-          <p>Project: ISO/IEC JTC1/SC22/WG21 14882: Programming Language - C++</p>
-          <p>Audience: Library Evolution Working Group Incubator (LEWGI, SG18), SG16</p>
-          <p>Reply-To: Tymi <a href="mailto:tymi.cpp@gmail.com">&lt;tymi.cpp@gmail.com&gt;</a></p>
-     </section>
+     <main>
 
-     <section class="abstract">
-          <p>Abstract</p>
-          <blockquote>
-               C++23 introduced <code>std::print</code> and <code>std::println</code>. While most standard library facilities support wide strings, these functions currently do not. This paper proposes the addition of wide-string overloads of these functions, accepting <code>std::wformat_string</code>, to provide consistent support for wide-character formatted output.
-          </blockquote>
-     </section>
+          <section class="title-page">
+               <h1>std::wprint / std::wprintln</h1>
 
-     <h2>Introduction</h2>
-     <p>This proposal extends the interface of the standard printing utilities by introducing wide-string versions of <code>std::print</code> and <code>std::println</code>.</p>
-     <p>The addition allows seamless integration with systems that use wide-characters and supports codebases where wide-character-strings are the preferred representation.</p>
+               <p>Document Number: D3673R0</p>
+               <p>Date: <i>23.05.2026</i></p>
+               <p>Project: ISO/IEC JTC1/SC22/WG21 14882: Programming Language - C++</p>
+               <p>Audience: Library Evolution Working Group Incubator (LEWGI, SG18), SG16</p>
+               <p>Reply-To: Tymi <a href="mailto:tymi.cpp@gmail.com">&lt;tymi.cpp@gmail.com&gt;</a></p>
+          </section>
 
-     <h2 id="revision-history"><a href="#history">Revision History</a></h2>
-     <ul>
-          <li>R0: Initial proposal.</li>
-     </ul>
+          <section class="abstract">
+               <h2>Abstract</h2>
+               <blockquote>
+                    C++23 introduced <code>std::print</code> and <code>std::println</code> function templates. While
+                    most standard library
+                    facilities support wide strings, these functions currently do not. This paper proposes the addition
+                    of wide-string overloads of these functions, accepting <code>std::wformat_string</code>, to provide
+                    consistent support for wide character formatted output.
+               </blockquote>
+          </section>
 
-     <h2 id="motivation"><a href="#motivation">Motivation and Scope</a></h2>
-     <p>
-          C++23 introduced <code>std::print</code> and <code>std::println</code> function templates, which provide efficient formatted text output. These functions are currently limited to narrow string formats.
-     </p>
-     <p>
-          Wide-strings are widely used throughout many codebases, particularly on Windows and in specialised environments that employ non-UTF-8 encodings. The lack of direct wide-string support in the formatted printing utilities provides confusion and leads to inconsistencies across APIs.
-     </p>
-     <p>
-          This proposal aims to narrow the gap by providing overloads for the <code>std::print</code> and <code>std::println</code> that accept <code>std::wformat_args</code>, ensuring that developers can use the formatted output facilities with wide-strings.
-     </p>
+          <section>
+               <h2>Introduction</h2>
+               <p>This proposal extends the interface of the standard printing utilities by introducing wide string
+                    versions of <code>std::print</code> and <code>std::println</code>.</p>
 
-     <h2 id="impact"><a href="#impact">Impact on the Standard</a></h2>
-     <h3>New Functionality</h3>
-     <p>
-          This proposal introduces additional function template overloads, no existing functionality is removed or changed, the impact is additive only.
-     </p>
-     <h2 id="wording"><a href="#wording">Wording</a></h2>
-     <p>
-          Change the <code>__cpp_lib_print</code> entry's value in section "Header <version> synopsis <code>[version.syn]</code>" to represent the current standard revision:
-          <pre>#define __cpp_lib_print <i>placeholder</i>  // also in &lt;print&gt; and &lt;ostream&gt; </pre>
-          
-          <h2>Add the following definitions to <code>[print.fun]</code> and <code>[ostream.formatted.print]</code></h2>
+               <p>The addition allows integration with systems that use wide characters and supports codebases
+                    where wide character strings are the preferred representation.</p>
+          </section>
 
-          <div class="wording">
-          <p>
-              <code>void vprint_unicode(wostream&amp; os, wstring_view fmt, wformat_args args);</code><br>
-              <code>void vprint_nonunicode(wostream&amp; os, wstring_view fmt, wformat_args args);</code>
-          </p>
-          
-          <p><strong>Effects:</strong> Behaves as a formatted output function of <code>os</code>, except that:</p>
-          <ul>
-              <li>Failure to generate output is reported as specified below, and</li>
-              <li>Any exception thrown by the call to <code>vformat</code> is propagated without regard to the value of <code>os.exceptions()</code> and without turning on <code>ios_base::badbit</code> in the error state of <code>os</code>.</li>
-          </ul>
-          
-          <p>After constructing a sentry object, the function initializes an automatic variable via:</p>
-          <pre><code>wstring out = vformat(os.getloc(), fmt, args);</code></pre>
-          
-          <p>If the function is <code>vprint_unicode</code> and <code>os</code> is a <em>stream</em> that refers to a terminal capable of displaying Unicode (determined in an <em>implementation-defined</em> manner), it writes <code>out</code> to the terminal using the native Unicode API; if <code>out</code> contains invalid code units, the behaviour is undefined and implementations are encouraged to diagnose it. If the native Unicode API is used, the function flushes <code>os</code> before writing <code>out</code>. Otherwise (if <code>os</code> is not such a stream or the function is <code>vprint_nonunicode</code>), inserts the character sequence <code>[out.begin(), out.end())</code> into <code>os</code>. If writing to the terminal or inserting into <code>os</code> fails, calls <code>os.setstate(ios_base::badbit)</code> (which may throw <code>ios_base::failure</code>).</p>
-          
-          <p><em>Recommended practice:</em> For <code>vprint_unicode</code>, if invoking the native Unicode API requires transcoding, implementations should substitute invalid code units with <code>u+fffd</code> replacement character per the <em>Unicode Standard, Chapter 3.9</em> <code>u+fffd</code> Substitution in Conversion.</p>
-          
-          <p>
-              <code>void vprint_unicode(FILE*&amp; stream, wstring_view fmt, wformat_args args);</code><br>
-              <code>void vprint_nonunicode(FILE*&amp; stream, wstring_view fmt, wformat_args args);</code>
-          </p>
-               <p><strong>Preconditions:</strong> <code>stream</code> is a valid pointer to an output C wide stream.</p>
+          <section>
+               <h2 id="revision-history"><a href="#revision-history">Revision History</a></h2>
+               <ul>
+                    <li>R0: Initial proposal.</li>
+               </ul>
+          </section>
 
-          <p><strong>Effects:</strong> The function initialises an automatic variable via:</p>
-          <pre><code>wstring out = vformat(fmt, args);</code></pre>
-          
-          <p>If <code>stream</code> refers to a terminal capable of displaying Unicode, writes <code>out</code> to the terminal using the native Unicode API; if <code>out</code> contains invalid code units, the behaviour is undefined and implementations are encouraged to diagnose it. Otherwise writes <code>out</code> to <code>stream</code> unchanged. If the native Unicode API is used, the function flushes <code>stream</code> before writing <code>out</code>.</p>
-          
-          <ul>
-              <li><strong>Note 1:</strong> On POSIX and Windows, <code>stream</code> referring to a terminal means that <code>isatty(fileno(stream))</code> and <code>GetConsoleMode(_get_osfhandle(_fileno(stream)), ...)</code> return nonzero.</li>
-              <li><strong>Note 2:</strong> On Windows, the native Unicode API is <code>WriteConsoleW</code>.</li>
-          </ul>
-          
-          <p><strong>Throws:</strong> Any exception thrown by the call to <code>vformat</code>. <code>system_error</code> if writing to the terminal or <code>stream</code> fails. May throw <code>bad_alloc</code>.</p>
-          
-          <p><em>Recommended practice:</em> If invoking the native Unicode API requires transcoding, implementations should substitute invalid code units with <code>u+fffd</code> replacement character per the Unicode Standard, Chapter 3.9 <code>u+fffd</code> Substitution in Conversion.</p>
-               
-          <h3>Templates</h3>
-          
-          <pre><code>template&lt;class... Args&gt;
-          void print(wformat_string&lt;Args...&gt; fmt, Args&amp;&amp;... args);
-          </code></pre>
-          <p><em>Effects:</em> Equivalent to:</p>
-          <pre><code>print(stdout, fmt, std::forward&lt;Args&gt;(args)...);</code></pre>
-          
-          <pre><code>template&lt;class... Args&gt;
-          void print(FILE* stream, wformat_string&lt;Args...&gt; fmt, Args&amp;&amp;... args);
-          </code></pre>
-          <p><em>Effects:</em> If the ordinary literal encoding is UTF-8, UTF-16 or UTF-32, equivalent to:</p>
-          <pre><code>vprint_unicode(stream, fmt.str, make_wformat_args(std::forward&lt;Args&gt;(args)...));</code></pre>
-          <p>Otherwise, equivalent to:</p>
-          <pre><code>vprint_nonunicode(stream, fmt.str, make_wformat_args(std::forward&lt;Args&gt;(args)...));</code></pre>
-          
-          <pre><code>template&lt;class... Args&gt;
-          void println(wformat_string&lt;Args...&gt; fmt, Args&amp;&amp;... args);
-          </code></pre>
-          <p><em>Effects:</em> Equivalent to:</p>
-          <pre><code>println(stdout, fmt, std::forward&lt;Args&gt;(args)...);</code></pre>
-          
-          <pre><code>template&lt;class... Args&gt;
-          void println(FILE* stream, wformat_string&lt;Args...&gt; fmt, Args&amp;&amp;... args);
-          </code></pre>
-          <p><em>Effects:</em> Equivalent to:</p>
-          <pre><code>print(stream, L"{}\n", format(fmt, std::forward&lt;Args&gt;(args)...));</code></pre>
-          
-          <pre><code>void vprint_unicode(wstring_view fmt, format_args args);
-          </code></pre>
-          <p><em>Effects:</em> Equivalent to:</p>
-          <pre><code>vprint_unicode(stdout, fmt, args);</code></pre>
-          </div>
-     </p>
+          <section>
+               <h2 id="motivation"><a href="#motivation">Motivation and Scope</a></h2>
 
-     <h2 id="spec"><a href="#spec">Technical Specification</a></h2>
-     <pre>
-<span class="keyword">namespace</span> <span class="type">std</span>
+               <p>
+                    C++23 introduced <code>std::print</code> and <code>std::println</code> function templates, which
+                    provide efficient formatted text output. These functions are currently limited to narrow string
+                    formats.
+               </p>
+
+               <p>
+                    Wide character strings are widely used throughout many codebases, particularly on Windows and in
+                    specialised
+                    environments that prefer wider encoding. The lack of direct wide-string support in the
+                    formatted printing utilities causes confusion, leads to inconsistencies across APIs and does not
+                    support modern C++ features.
+               </p>
+
+               <p>
+                    This proposal aims to fix these problems by providing overloads for <code>std::print</code> and
+                    <code>std::println</code> that accept <code>std::wformat_args</code>, ensuring that developers can
+                    use the formatted output facilities with wide character strings.
+               </p>
+          </section>
+
+          <section>
+               <h2 id="impact"><a href="#impact">Impact on the Standard</a></h2>
+
+               <h3>New Functionality</h3>
+               <p>
+                    This proposal introduces additional function template overloads, no existing functionality is
+                    removed or changed, the impact is additive only.
+               </p>
+          </section>
+
+          <section>
+               <h2 id="wording"><a href="#wording">Wording</a></h2>
+
+               <p>
+                    Change the <code>__cpp_lib_print</code> entry's value in section "Header &lt;version&gt; synopsis
+                    <code>[version.syn]</code>" to represent the current standard revision:
+               </p>
+
+               <pre><code>#define __cpp_lib_print <i>placeholder</i>  // also in &lt;print&gt; and &lt;ostream&gt;</code></pre>
+
+               <h3>Add the following definitions to <code>[print.fun]</code> and
+                    <code>[ostream.formatted.print]</code>
+               </h3>
+
+               <div class="wording">
+                    <p><code>void vprint_unicode(wostream&amp; os, wstring_view fmt, wformat_args args);</code><br>
+                         <code>void vprint_nonunicode(wostream&amp; os, wstring_view fmt, wformat_args args);</code>
+                    </p>
+
+                    <p><strong>Effects:</strong> Behaves as a formatted output function of <code>os</code>...</p>
+
+                    <ul>
+                         <li>Failure to generate output is reported as specified below</li>
+                         <li>Exceptions from <code>vformat</code> propagate regardless of <code>os.exceptions()</code>
+                         </li>
+                    </ul>
+
+                    <p>After constructing a sentry object:</p>
+
+                    <pre><code>wstring out = vformat(os.getloc(), fmt, args);</code></pre>
+               </div>
+          </section>
+
+          <section>
+               <h2 id="spec"><a href="#spec">Technical Specification</a></h2>
+
+               <pre><code>
+namespace std
 {
-     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">print</span>(<span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);</pre>
+     template &lt;typename... Args&gt;
+     void print(wformat_string&lt;Args...&gt; fmt, Args&&... args);
 
-     <pre>
-     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">print</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
-</pre>
+     template &lt;typename... Args&gt;
+     void print(FILE* stream, wformat_string&lt;Args...&gt; fmt, Args&&... args);
 
-     <pre>
-     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">println</span>(<span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
-</pre>
-     <pre>
-     <span class="keyword">template</span> <span class="macro">&lt;</span><span class="keyword">typename...</span> <span class="type">Args</span><span class="macro">&gt;</span>
-     <span class="keyword">void</span> <span class="func">println</span>(<span class="type">FILE</span>* <span class="var">stream</span>, <span class="type">wformat_string</span><span class="macro">&lt;</span><span class="type">Args...</span><span class="macro">&gt;</span> <span class="var">fmt</span>, <span class="type">Args&&</span>... <span class="var">args</span>);
-</pre>
-     <pre>
-     <span class="keyword">void</span> <span class="func">vprint_unicode</span>(<span class="type">wostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
-     <span class="keyword">void</span> <span class="func">vprint_nonunicode</span>(<span class="type">wostream</span>& <span class="var">os</span>, <span class="type">wstring_view</span> <span class="var">fmt</span>, <span class="type">wformat_args</span> <span class="var">args</span>);
-</pre>
-     <pre>
+     template &lt;typename... Args&gt;
+     void println(wformat_string&lt;Args...&gt; fmt, Args&&... args);
+
+     template &lt;typename... Args&gt;
+     void println(FILE* stream, wformat_string&lt;Args...&gt; fmt, Args&&... args);
+
+     void vprint_unicode(wostream& os, wstring_view fmt, wformat_args args);
+     void vprint_nonunicode(wostream& os, wstring_view fmt, wformat_args args);
 }
-</pre>
-     <p>
-          These overloads provide wide-string support for <code>std::print</code> and <code>std::println</code> functions.
-     </p>
+               </code></pre>
+          </section>
 
-     <h2 id="experience"><a href="#experience">Implementation Experience</a></h2>
-     <p>
-          No production implementations are yet available.
-     </p>
-     <p>
-          Work is in progress to add these overloads to MSVC, ECPPS and Clang.
-     </p>
+          <section>
+               <h2 id="experience"><a href="#experience">Implementation Experience</a></h2>
+               <p>A proof of concept is done for MSVC.</p>
+          </section>
 
-     <h2 id="decisions"><a href="#decisions">Design Decisions</a></h2>
-     <p>
-          An alternative design to additional overloads would introduce distinct functions named <code>wprint</code> and <code>wprintln</code>, aligning with the C naming style (printf / wprintf) and the cout/wcout precedent.
-     </p>
-     <p>
-          There could also exist overloads for other strings (<code>std::basic_format_string &lt;charN_t&gt;</code>), but this proposal does not cover those. Maybe in a future revision or a separate paper.
-     </p>
-     <p>
-          This paper rejects that approach for the following reasons:
-          <ol>
-             <li><code>std::print</code> and <code>std::format</code> are designed to be consistent; overloads better match this design than distinct function names.</li>  
-             <li>Introducing new overload sets would further unnecessarily increase the complexity and ambiguity.</li>  
-          </ol>
-     </p>
-     <p>
-          Support for additional character types (<code>char8_t</code>, <code>char16_t</code>, <code>char32_t</code>) is conceivable but outside the scope of this paper.
-     </p>
+          <section>
+               <h2 id="decisions"><a href="#decisions">Design Decisions</a></h2>
 
-     <h2 id="references"><a href="#references">References</a></h2>
-     <ul>
-          <li><a href="https://open-std.org/jtc1/sc22/wg21/docs/papers/2025/n5008.pdf" target="_blank">N5008</a>: Programming Languages - C++</li>
-          <li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2093r14.html" target="_blank">P2093</a>: Formatted output</li>
-     </ul>
+               <p>
+                    An alternative design would introduce distinct functions named <code>wprint</code> and
+                    <code>wprintln</code>, aligning with the C naming style.
+               </p>
 
-     <h2 id="examples"><a href="#examples">Appendix A. Examples</a></h2>
-     <h3>WinAPI</h3>
-     <pre>
-<span class="keyword">int</span> main(<span class="keyword">void</span>)
+               <p>Rejected because:</p>
+
+               <ol>
+                    <li>Consistency with <code>std::print</code> / <code>std::format</code></li>
+                    <li>Reduced API surface complexity</li>
+               </ol>
+
+               <p>
+                    Support for <code>char8_t</code>, <code>char16_t</code>, <code>char32_t</code> is outside scope.
+               </p>
+          </section>
+          <section>
+               <h2 id="charN_t">Support for UTF-N character strings</h2>
+               <p>
+
+               </p>
+          </section>
+
+          <section>
+               <h2 id="references"><a href="#references">References</a></h2>
+
+               <ul>
+                    <li><a href="https://open-std.org/jtc1/sc22/wg21/docs/papers/2025/n5008.pdf">N5008</a></li>
+                    <li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2093r14.html">P2093</a></li>
+               </ul>
+          </section>
+
+          <section>
+               <h2 id="examples"><a href="#examples">Appendix A. Examples</a></h2>
+
+               <h3>WinAPI</h3>
+               <pre>
+int main(void)
 {
-     <span class="type">std</span>::<span class="type">wstring</span> <span class="var">locale</span>{};
-     <span class="var">locale</span>.<span class="func">resize</span>(<span class="macro">LOCALE_NAME_MAX_LENGTH</span>);
-     <span class="var">locale</span>.<span class="func">resize</span>(<span class="func">GetUserDefaultLocaleName</span>(<span class="var">locale</span>.<span class="func">data</span>(), <span class="var">locale</span>.<span class="func">size</span>()) - <span class="number">1</span>);     
+     std::wstring locale{};
+     locale.resize(LOCALE_NAME_MAX_LENGTH);
+     locale.resize(GetUserDefaultLocaleName(locale.data(), locale.size()) - 1);
 
-     <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"The System Locale is {}"</span>, <span class="var">locale</span>);
-}
-</pre>
-     <p>
-          Expected output:
-          <pre>The System Locale is en-GB</pre>
-     </p>
-     <h3>Unicode characters in paths</h3>
-     <pre>
-<span class="keyword">void</span> PrintPath(<span class="type">std</span>::<span class="type">filesystem</span>::<span class="type">path</span> <span class="var">path</span>)
+     std::println(L"The System Locale is {}", locale);
+}</pre>
+
+               <h3>Unicode characters in paths</h3>
+               <pre>
+void PrintPath(std::filesystem::path path)
 {
-     <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"Path = {}"</span>, <span class="var">path</span>);
-}
-     </pre>
-     <h3>Displaying emojis</h3>
-     <pre>
-<span class="keyword">void</span> <span class="func">PrintPath</span>(<span class="type">std</span>::<span class="type">filesystem</span>::<span class="type">path</span> <span class="var">path</span>)
+     std::println(L"Path = {}", path);
+}</pre>
+
+               <h3>Displaying emojis</h3>
+               <pre>
+void PrintPath(std::filesystem::path path)
 {
-    <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"Path = {}"</span>, <span class="var">path</span>.<span class="func">wstring</span>());
+    std::println(L"Path = {}", path.wstring());
 }
 
-<span class="keyword">int</span> <span class="func">main</span>(<span class="keyword">void</span>)
+int main(void)
 {
-    <span class="func">SetConsoleOutputCP</span>(<span class="macro">CP_UTF8</span>);
-    <span class="type">std</span>::<span class="type">wstring</span> <span class="var">locale</span>{};
-    <span class="var">locale</span>.<span class="func">resize</span>(<span class="macro">LOCALE_NAME_MAX_LENGTH</span>);
-    <span class="var">locale</span>.<span class="func">resize</span>(<span class="func">GetUserDefaultLocaleName</span>(<span class="var">locale</span>.<span class="func">data</span>(), <span class="type">static_cast</span>&lt;<span class="type">DWORD</span>&gt;(<span class="var">locale</span>.<span class="func">size</span>())) - <span class="number">1</span>);
+    SetConsoleOutputCP(CP_UTF8);
 
-    <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"The System Locale is {}"</span>, <span class="var">locale</span>);
-    <span class="type">std</span>::<span class="func">println</span>(<span class="string">L"Pair: 🍋\x200D🟩"</span>);
-    <span class="keyword">static_assert</span>(<span class="func">sizeof</span>(<span class="string">L"🍋\x200D🟩"</span>) == <span class="number">12</span>);
-    <span class="func">PrintPath</span>(<span class="type">std</span>::<span class="func">filesystem</span>::<span class="func">current_path</span>());
-}
-     </pre>
-     <p>
-          Expected output:
-          <pre>
+    std::wstring locale{};
+    locale.resize(LOCALE_NAME_MAX_LENGTH);
+    locale.resize(GetUserDefaultLocaleName(locale.data(),
+        static_cast&lt;DWORD&gt;(locale.size())) - 1);
+
+    std::println(L"The System Locale is {}", locale);
+    std::println(L"Pair: 🍋\x200D🟩");
+
+    static_assert(sizeof(L"🍋\x200D🟩") == 12);
+
+    PrintPath(std::filesystem::current_path());
+}</pre>
+
+               <p>Expected output:</p>
+
+               <pre>
 The System Locale is en-GB
 Pair: 🍋‍🟩
-Path = F:\source\P3673\P3673
-</pre>
-     </p>
+Path = F:\source\P3673\P3673</pre>
+          </section>
+
+     </main>
+
 </body>
 
 </html>
